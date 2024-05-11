@@ -14,13 +14,14 @@ import java.util.logging.Logger;
 public class Server extends UnicastRemoteObject implements IRemoteMethod {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final GraphUtils graphUtils;
+    private GraphUtils graphUtils;
     private final Map<Long, ArrayList<Long>> performance;
     private static final Logger logger = Logger.getLogger(Server.class.getName());
 
     protected Server() throws RemoteException {
         super();
-        graphUtils = new GraphUtils();
+        // Add the absolut path for the graph file
+        graphUtils = new GraphUtils("graph.txt");
         performance = new HashMap<>();
     }
 

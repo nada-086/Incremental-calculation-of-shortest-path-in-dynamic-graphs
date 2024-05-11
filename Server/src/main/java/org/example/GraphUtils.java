@@ -18,28 +18,49 @@ public class GraphUtils {
         this.graph = new ArrayList<>();
     }
 
-    public ArrayList<ArrayList<Integer>> parseGraph(String fileName) throws IOException {
-        ArrayList<Point> nodes = new ArrayList<>();
+    // Constructor to initialize the graph from a file
+    public GraphUtils(String fileName) {
+        this.graph = new ArrayList<>();
+        try {
+            initializeFromFile(fileName);
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Error initializing graph from file: " + fileName, e);
+        }
+    }
+
+    private void initializeFromFile(String fileName) throws IOException {
         ArrayList<String> data = readFromFile(fileName);
+        ArrayList<Point> nodes = new ArrayList<>();
         int max = -1;
 
         for (String line : data) {
-            String[] s = line.split(" ");
-            int index1 = Integer.parseInt(s[0]);
-            int index2 = Integer.parseInt(s[1]);
-            nodes.add(new Point(index1, index2));
-            if (index1 > max) max = index1;
-            if (index2 > max) max = index2;
+            if (line.equals("S")) {
+                break; // Stop reading when 'S' is encountered
+            }
+
+            String[] parts = line.split(" ");
+            if (parts.length != 2) {
+                logger.log(Level.WARNING, "Invalid input format: " + line);
+                continue;
+            }
+
+            try {
+                int nodeIndex1 = Integer.parseInt(parts[0]);
+                int nodeIndex2 = Integer.parseInt(parts[1]);
+                nodes.add(new Point(nodeIndex1, nodeIndex2));
+                max = Math.max(max, Math.max(nodeIndex1, nodeIndex2));
+            } catch (NumberFormatException e) {
+                logger.log(Level.WARNING, "Invalid number format: " + line, e);
+            }
         }
 
-        for (int j = 0; j < max; j++) {
+        for (int i = 0; i <= max; i++) {
             graph.add(new ArrayList<>());
         }
 
         for (Point node : nodes) {
-            graph.get(node.x - 1).add(node.y - 1);
+            graph.get(node.x).add(node.y);
         }
-        return graph;
     }
 
     private ArrayList<String> readFromFile(String fileName) throws IOException {
@@ -49,9 +70,6 @@ public class GraphUtils {
             while ((line = reader.readLine()) != null) {
                 records.add(line);
             }
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Error reading from file: " + fileName, e);
-            throw e;
         }
         return records;
     }
@@ -59,12 +77,7 @@ public class GraphUtils {
     public void deleteEdge(int src, int dest) {
         try {
             if (src < graph.size()) {
-                for (int i = 0; i < graph.get(src).size(); i++) {
-                    if (graph.get(src).get(i) == dest) {
-                        graph.get(src).remove(i);
-                        return;
-                    }
-                }
+                graph.get(src).remove((Integer) dest);
             }
         } catch (IndexOutOfBoundsException e) {
             logger.log(Level.WARNING, "Index out of bounds in deleteEdge", e);
@@ -73,16 +86,11 @@ public class GraphUtils {
 
     public void addEdge(int src, int dest) {
         try {
-            if (src < graph.size()) {
-                if (!graph.get(src).contains(dest)) {
-                    graph.get(src).add(dest);
-                }
-            } else {
-                graph.add(new ArrayList<>());
+            if (src < graph.size() && !graph.get(src).contains(dest)) {
                 graph.get(src).add(dest);
             }
-            if (dest == graph.size()) {
-                graph.add(new ArrayList<>());
+            if (dest < graph.size() && !graph.get(dest).contains(src)) {
+                graph.get(dest).add(src); // Assuming the graph is undirected
             }
         } catch (IndexOutOfBoundsException e) {
             logger.log(Level.WARNING, "Index out of bounds in addEdge", e);
@@ -98,15 +106,11 @@ public class GraphUtils {
             queue.add(new Node(src, 0));
             while (!queue.isEmpty()) {
                 Node node = queue.remove(0);
-                if (node.nodeNum() >= graph.size()) {
-                    continue;
+                if (node.nodeNum() == dest) {
+                    numberOfNodes = node.cost();
+                    return numberOfNodes;
                 }
-                ArrayList<Integer> adjacent = graph.get(node.nodeNum());
-                for (int adjNode : adjacent) {
-                    if (adjNode == dest) {
-                        numberOfNodes = node.cost() + 1;
-                        return numberOfNodes;
-                    }
+                for (int adjNode : graph.get(node.nodeNum())) {
                     if (!visited[adjNode]) {
                         visited[adjNode] = true;
                         queue.add(new Node(adjNode, node.cost() + 1));
