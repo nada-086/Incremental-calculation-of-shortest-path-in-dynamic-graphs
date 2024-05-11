@@ -8,12 +8,14 @@ public class Threads {
     public static void main(String[] args) throws InterruptedException {
         ArrayList<Client> threads = new ArrayList<>();
         for (int i = 0; i<noOfClients; ++i) {
-            threads.add(new Client());
+            Client client = new Client();
             
             // Create log file for each client
             String logFileName = "log" + i + ".txt";
+            client.setLogFileName(logFileName); // Set log file name for the client
             createLogFile(logFileName);
-            
+                        
+            threads.add(client);
             threads.get(i).start();
             Thread.sleep(1000);
         }
