@@ -1,5 +1,7 @@
 package clientRMI;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -8,6 +10,11 @@ import java.rmi.registry.Registry;
 import static clientRMI.BatchRequestGenerator.getBatch;
 
 public class Client extends Thread implements Runnable {
+    private String logFileName;
+
+    public void setLogFileName(String logFileName) {
+        this.logFileName = logFileName;
+    }
 
     public static void startClientProcess() throws RemoteException, NotBoundException {
         int graphSize = 5;
@@ -27,6 +34,21 @@ public class Client extends Thread implements Runnable {
         System.out.println("Response from server is :  \n" + response
                 + "\n Response Time is: "+responseTime );
 
+         // Log client actions and response to file
+        logToFile(logFileName, "Batch generated:\n" + batch + "\nResponse from server:\n" + response + "\nResponse Time: " + responseTime);
+
+    }
+
+    
+    private static void logToFile(String fileName, String content) {
+        try {
+            FileWriter fileWriter = new FileWriter(fileName, true);
+            fileWriter.write(content);
+            fileWriter.write("\n");
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
