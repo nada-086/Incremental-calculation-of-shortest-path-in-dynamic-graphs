@@ -1,4 +1,4 @@
-package clientRMI;
+package org.example;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,8 +24,8 @@ public class BatchRequestGenerator {
     }
 
     private static void generateUpdateOperation(int graphSize, ArrayList<String> batchesList) {
-        int v1 = rand.nextInt(graphSize);
-        int v2 = rand.nextInt(graphSize);
+        int v1 = rand.nextInt(1, graphSize);
+        int v2 = rand.nextInt(1, graphSize);
         StringBuilder batch = new StringBuilder();
 
         char op = (rand.nextInt(2) == 0) ? 'A' : 'D'; // Randomly choose between 'A' (addition) or 'D' (deletion)
@@ -35,8 +35,8 @@ public class BatchRequestGenerator {
     }
 
     private static void generateQueryOperation( int graphSize, ArrayList<String> batchesList) {
-        int v1 = rand.nextInt(graphSize);
-        int v2 = rand.nextInt(graphSize);
+        int v1 = rand.nextInt(1, graphSize);
+        int v2 = rand.nextInt(1, graphSize);
 
         batchesList.add("Q" + ' ' + v1 + ' ' + v2);
     }

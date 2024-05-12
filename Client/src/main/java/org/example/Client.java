@@ -1,4 +1,4 @@
-package clientRMI;
+package org.example;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -6,35 +6,37 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Objects;
 
-import static clientRMI.BatchRequestGenerator.getBatch;
+import static org.example.BatchRequestGenerator.getBatch;
 
 public class Client extends Thread implements Runnable {
-    private String logFileName;
+    private static String logFileName;
 
     public void setLogFileName(String logFileName) {
         this.logFileName = logFileName;
     }
 
     public static void startClientProcess() throws RemoteException, NotBoundException {
-        int graphSize = 5;
+        int graphSize = 6;
         int writePercentage =  50;
         int batchSize = 4;
-        Registry registry = LocateRegistry.getRegistry("localhost", 1099);
+        Registry registry = LocateRegistry.getRegistry("127.0.1.1",1099);
         IRemoteMethod reg = (IRemoteMethod) registry.lookup("RemoteMethod");
 
         ArrayList<String> batch = getBatch(writePercentage, batchSize, graphSize);
         System.out.println("batch generated is:  \n" + batch);
+        if(Objects.equals(reg.serverReady(), "R")){
+            long startTime = System.currentTimeMillis();
+            ArrayList<String> response = reg.processBatch(batch, "BFS"); //reg.executeBatch(batch); //
+            long endTime = System.currentTimeMillis();
 
-        long startTime = System.currentTimeMillis();
-        ArrayList<String> response = reg.executeBatch(batch);
-        long endTime = System.currentTimeMillis();
+            long responseTime = endTime - startTime;
+            System.out.println("Response from server is :  \n" + response
+                    + "\n Response Time is: "+responseTime );
 
-        long responseTime = endTime - startTime;
-        System.out.println("Response from server is :  \n" + response
-                + "\n Response Time is: "+responseTime );
-
-        logToFile(logFileName, batch, response, responseTime);
+            logToFile(logFileName, batch, response, responseTime);
+        }
 
     }
     

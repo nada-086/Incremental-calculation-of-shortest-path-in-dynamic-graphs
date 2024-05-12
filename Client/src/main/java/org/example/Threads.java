@@ -1,4 +1,4 @@
-package clientRMI;
+package org.example;
 
 import java.util.ArrayList;
 import java.io.FileWriter;

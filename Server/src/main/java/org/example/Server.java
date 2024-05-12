@@ -120,22 +120,6 @@ public class Server extends UnicastRemoteObject implements IRemoteMethod {
                     default -> logger.log(Level.WARNING, "Invalid operation: " + queryType);
                 }
             }
-//            if(queryType == 'A'){
-//                graph.add(u, v);
-//                logger.info("Edge added from " + u + " to " + v);
-//            }
-//            else if(queryType == 'D'){
-//                graph.delete(u, v);
-//                logger.info("Edge removed from " + u + " to " + v);
-//            }
-//            else if (queryType == 'Q'){
-//                int out = graph.shortestPath(u, v , algoritm);
-//                logger.info("Shortest path between " + u + " and " + v + " usign " + algoritm + " is: " + out);
-//                result.add(Integer.toString(out));
-//            }
-//            else {
-//                logger.log(Level.WARNING, "Invalid operation: " + queryType);
-//            }
         }
         long stopTime = System.currentTimeMillis();
         addToPerformance(Thread.currentThread().threadId(), false, stopTime,performance2);

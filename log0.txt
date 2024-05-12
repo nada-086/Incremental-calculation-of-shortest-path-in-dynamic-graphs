@@ -1,0 +1,12 @@
+Batch generated:
+D 3 4
+Q 4 4
+Q 3 5
+Q 4 4
+F
+Response from server:
+0
+-1
+0
+Response Time: 146 ms
+------------------------
