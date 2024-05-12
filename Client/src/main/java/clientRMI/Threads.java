@@ -1,6 +1,8 @@
 package clientRMI;
 
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Threads {
     public static int noOfClients = 2;
