@@ -2,7 +2,8 @@ package clientRMI;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public interface IRemoteMethod extends Remote {
-    String executeBatch(String batch) throws RemoteException;
+    ArrayList<String> executeBatch(ArrayList<String> batch) throws RemoteException;
 }

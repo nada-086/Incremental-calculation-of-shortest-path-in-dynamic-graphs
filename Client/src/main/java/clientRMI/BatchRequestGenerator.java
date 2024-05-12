@@ -1,39 +1,43 @@
 package clientRMI;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class BatchRequestGenerator {
 
     private static final Random rand = new Random();
 
-    public static String getBatch(int writePercentage, int batchSize, int graphSize) {
-        StringBuilder batch = new StringBuilder();
+    public static ArrayList<String> getBatch(int writePercentage, int batchSize, int graphSize) {
+        ArrayList<String> batchesList = new ArrayList<>();
 
         for (int i = 0; i < batchSize; ++i) {
             int operation = rand.nextInt(100);
 
             if (operation < writePercentage) {
-                generateUpdateOperation(batch, graphSize);
+                generateUpdateOperation(graphSize, batchesList);
             } else {
-                generateQueryOperation(batch, graphSize);
+                generateQueryOperation(graphSize, batchesList);
             }
         }
-        batch.append('F');
-        return batch.toString();
+        batchesList.add("F");
+        return batchesList;
     }
 
-    private static void generateUpdateOperation(StringBuilder batch, int graphSize) {
+    private static void generateUpdateOperation(int graphSize, ArrayList<String> batchesList) {
         int v1 = rand.nextInt(graphSize);
         int v2 = rand.nextInt(graphSize);
+        StringBuilder batch = new StringBuilder();
 
         char op = (rand.nextInt(2) == 0) ? 'A' : 'D'; // Randomly choose between 'A' (addition) or 'D' (deletion)
-        batch.append(op).append(' ').append(v1).append(' ').append(v2).append('\n');
+
+        batch.append(op).append(' ').append(v1).append(' ').append(v2);
+        batchesList.add(batch.toString());
     }
 
-    private static void generateQueryOperation(StringBuilder batch, int graphSize) {
+    private static void generateQueryOperation( int graphSize, ArrayList<String> batchesList) {
         int v1 = rand.nextInt(graphSize);
         int v2 = rand.nextInt(graphSize);
 
-        batch.append('Q').append(' ').append(v1).append(' ').append(v2).append('\n');
+        batchesList.add("Q" + ' ' + v1 + ' ' + v2);
     }
 }
