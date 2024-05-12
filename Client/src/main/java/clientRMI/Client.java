@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import static clientRMI.BatchRequestGenerator.getBatch;
 
 public class Client extends Thread implements Runnable {
+    private String logFileName;
+
+    public void setLogFileName(String logFileName) {
+        this.logFileName = logFileName;
+    }
 
     public static void startClientProcess() throws RemoteException, NotBoundException {
         int graphSize = 5;
@@ -28,18 +33,37 @@ public class Client extends Thread implements Runnable {
         System.out.println("Response from server is :  \n" + response
                 + "\n Response Time is: "+responseTime );
 
+        logToFile(logFileName, batch, response, responseTime);
+
     }
     
-    private static void logToFile(String fileName, String content) {
-        try {
-            FileWriter fileWriter = new FileWriter(fileName, true);
-            fileWriter.write(content);
-            fileWriter.write("\n");
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+private static void logToFile(String fileName, ArrayList<String> batch, ArrayList<String> responses, long responseTime) {
+    try {
+        FileWriter fileWriter = new FileWriter(fileName, true);
+        
+        // Log batch generated
+        fileWriter.write("Batch generated:\n");
+        for (String operation : batch) {
+            fileWriter.write(operation + "\n");
         }
+        
+        // Log each response from the server
+        fileWriter.write("Response from server:\n");
+        for (String response : responses) {
+            fileWriter.write(response + "\n");
+        }
+        
+        // Log response time
+        fileWriter.write("Response Time: " + responseTime + " ms\n");
+        
+        // Add a separator between entries for better readability
+        fileWriter.write("------------------------\n");
+        
+        fileWriter.close();
+    } catch (IOException e) {
+        e.printStackTrace();
     }
+}
 
     @Override
     public void run() {
