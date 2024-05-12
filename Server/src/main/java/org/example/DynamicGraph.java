@@ -101,6 +101,9 @@ public class DynamicGraph {
     }
 
     int BFS(int u, int v){
+        if (!graph.containsKey(u)){
+            return -1;
+        }
         if (u == v) return 0;
 
         HashMap<Integer, Integer> visited= new HashMap<>();
@@ -129,6 +132,9 @@ public class DynamicGraph {
     }
 
     int bidirectionalBFS(int u, int v){
+        if (!graph.containsKey(u)){
+            return -1;
+        }
         if (u == v) return 0;
 
         HashMap<Integer, Integer> visitedForward = new HashMap<>();
