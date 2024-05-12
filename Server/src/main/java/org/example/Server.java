@@ -81,7 +81,7 @@ public class Server extends UnicastRemoteObject implements IRemoteMethod {
     }
 
     @Override
-    public synchronized String processBatch(String batch, String algoritm) throws RemoteException {
+    public synchronized ArrayList<String> processBatch(String batch, String algoritm) throws RemoteException {
         logger.info("Server started a batch_2");
         //StringBuilder result = new StringBuilder();
         ArrayList<String> result = new ArrayList<>();
@@ -140,7 +140,7 @@ public class Server extends UnicastRemoteObject implements IRemoteMethod {
         long stopTime = System.currentTimeMillis();
         addToPerformance(Thread.currentThread().threadId(), false, stopTime,performance2);
         logger.info("Server finnished a batch_2");
-        return result.toString();
+        return result;
     }
 
 
