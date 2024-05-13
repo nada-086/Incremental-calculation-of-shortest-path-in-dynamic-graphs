@@ -28,12 +28,11 @@ public class Threads {
 
     }
     private static void createLogFile(String fileName) {
-        try {
-            FileWriter fileWriter = new FileWriter(fileName);
-            // Write header or any initial content if needed
-            fileWriter.close();
+        try (FileWriter fileWriter = new FileWriter(fileName, true)) {
+        // No need to write anything here; the file will be appended if it exists
         } catch (IOException e) {
             e.printStackTrace();
+        // Handle file creation failure appropriately
         }
     }
 }
