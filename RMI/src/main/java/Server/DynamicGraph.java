@@ -1,24 +1,17 @@
-package org.example;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
+package Server;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
+import java.io.*;
+import java.util.*;
 
 public class DynamicGraph {
     private static final Logger logger = LogManager.getLogger(DynamicGraph.class);
     private HashMap<Integer, HashSet<Integer>> graph;
     private HashMap<Integer, HashSet<Integer>> reversedGraph;
     private int graphInitialSize = 0;
+    public String ready = "notReady";
 
     public DynamicGraph(String filePath){
         createGraph(filePath);
@@ -64,11 +57,20 @@ public class DynamicGraph {
 
                 graphInitialSize = Math.max(graphInitialSize, Math.max(u, v));
             }
+            System.out.println("Graph created with initial size: " + graphInitialSize);
+            setReady("R");
+            System.out.println(getReady());
             bufferedReader.close();
-            logger.info("Graph created with initial size: " + graphInitialSize);
+
         } catch (Exception e) {
             logger.error("Error reading file: " + e.getMessage());
         }
+    }
+    public void setReady(String status){
+        this.ready = status;
+    }
+    public String getReady(){
+        return ready;
     }
 
     public void add(int u, int v){
@@ -94,7 +96,7 @@ public class DynamicGraph {
     }
 
     public int shortestPath(int u, int v , String algorithm) {
-        if(algorithm == "BFS")
+        if(Objects.equals(algorithm, "BFS"))
             return BFS(u,v);
         else
             return bidirectionalBFS(u, v);

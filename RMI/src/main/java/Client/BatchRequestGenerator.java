@@ -1,4 +1,4 @@
-package org.example;
+package Client;
 
 import java.util.ArrayList;
 import java.util.Random;

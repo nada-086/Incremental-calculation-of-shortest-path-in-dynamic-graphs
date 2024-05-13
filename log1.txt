@@ -1,10 +1,32 @@
 Batch generated:
-D 2 1
-Q 5 5
-D 4 1
-A 2 4
+Q 2 1
+Q 4 2
+Q 1 5
+Q 1 4
 F
 Response from server:
+2
 -1
-Response Time: 18 ms
+-1
+-1
+Response Time: 36 ms
+------------------------
+Batch generated:
+A 4 3
+A 5 1
+D 1 2
+D 5 1
+F
+Response from server:
+Response Time: 11 ms
+------------------------
+Batch generated:
+A 3 5
+Q 5 3
+D 2 1
+D 1 4
+F
+Response from server:
+1
+Response Time: 22 ms
 ------------------------

@@ -1,3 +1,3 @@
-package org.example;
+package Server;
 
 public record Node(int nodeNum, int cost) { }

@@ -1,4 +1,4 @@
-package org.example;
+package Server;
 
 import java.io.Serial;
 import java.rmi.RemoteException;
@@ -8,80 +8,26 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server extends UnicastRemoteObject implements IRemoteMethod {
     @Serial
     private static final long serialVersionUID = 1L;
-    private GraphUtils graphUtils;
-    private DynamicGraph graph;
-    private final Map<Long, ArrayList<Long>> performance;
-
+    private final DynamicGraph graph;
     private final Map<Long, ArrayList<Long>> performance2;
     private static final Logger logger = Logger.getLogger(Server.class.getName());
 
     protected Server() throws RemoteException {
         super();
         // Add the absolut path for the graph file
-        graphUtils = new GraphUtils("graph.txt");
-
         graph = new DynamicGraph("graph.txt");
-
-        performance = new HashMap<>();
-
         performance2 = new HashMap<>();
 
     }
-
     @Override
-    public ArrayList<String> executeBatch(ArrayList<String> batch) throws RemoteException {
-        logger.info("Server started a batch_1");
-        ArrayList<String> outputs = new ArrayList<>();
-        long startTime = System.currentTimeMillis();
-        addToPerformance(Thread.currentThread().threadId(), true, startTime,performance);
-
-        for (String s : batch) {
-            String[] str = s.split(" ");
-            if (str.length != 3) {
-                logger.log(Level.WARNING, "Invalid input: " + s);
-                continue;
-            }
-            int src, destination;
-            try {
-                src = Integer.parseInt(str[1]) - 1;
-                destination = Integer.parseInt(str[2]) - 1;
-            } catch (NumberFormatException e) {
-                logger.log(Level.WARNING, "Invalid input: " + s, e);
-                continue;
-            }
-
-            synchronized (this) {
-                switch (str[0]) {
-                    case "Q" -> outputs.add(query(src, destination));
-                    case "A" -> addEdge(src, destination);
-                    case "D" -> deleteEdge(src, destination);
-                    case "F" -> {}
-                    default -> logger.log(Level.WARNING, "Invalid operation: " + str[0]);
-                }
-            }
-
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                logger.log(Level.WARNING, "Thread interrupted", e);
-                Thread.currentThread().interrupt();
-            }
-        }
-
-        long stopTime = System.currentTimeMillis();
-        addToPerformance(Thread.currentThread().threadId(), false, stopTime,performance);
-        logger.info("Server finnished a batch_1");
-        return outputs;
-    }
-
-    @Override
-    public synchronized ArrayList<String> processBatch(ArrayList<String> batchLines, String algoritm) throws RemoteException {
+    public synchronized ArrayList<String> processBatch(ArrayList<String> batchLines, String algorithm) throws RemoteException {
         logger.info("Server started a batch_2");
         //StringBuilder result = new StringBuilder();
         ArrayList<String> result = new ArrayList<>();
@@ -104,8 +50,8 @@ public class Server extends UnicastRemoteObject implements IRemoteMethod {
             synchronized (this) {
                 switch (queryType) {
                     case 'Q' -> {
-                        int out = graph.shortestPath(u, v , algoritm);
-                        logger.info("Shortest path between " + u + " and " + v + " usign " + algoritm + " is: " + out);
+                        int out = graph.shortestPath(u, v , algorithm);
+                        logger.info("Shortest path between " + u + " and " + v + " usign " + algorithm + " is: " + out);
                         result.add(Integer.toString(out));
                     }
                     case 'A' -> {
@@ -141,39 +87,14 @@ public class Server extends UnicastRemoteObject implements IRemoteMethod {
         }
     }
 
-    private void deleteEdge(int src, int destination) {
-        try {
-            graphUtils.deleteEdge(src, destination);
-            logger.info("Edge removed from " + src + " to " + destination);
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error deleting edge", e);
-        }
-    }
 
-    private void addEdge(int src, int destination) {
-        try {
-            graphUtils.addEdge(src, destination);
-            logger.info("Edge added from " + src + " to " + destination);
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error adding edge", e);
-        }
-    }
-
-    private String query(int src, int destination) {
-        try {
-            return Integer.toString(graphUtils.findShortestPath(src, destination));
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error executing query", e);
-            return "-1";
-        }
-    }
 
     @Override
-    public String serverReady() throws RemoteException {
-        return "R";
+    public boolean serverReady() throws RemoteException {
+        return Objects.equals(graph.getReady(), "R");
     }
 
-    public static void main(String[] args) {
+    public static void startServer() {
         try {
             Registry registry = LocateRegistry.createRegistry(1099);
             Server server = new Server();

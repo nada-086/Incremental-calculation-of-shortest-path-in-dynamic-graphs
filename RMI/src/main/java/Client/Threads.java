@@ -1,13 +1,13 @@
-package org.example;
+package Client;
 
-import java.util.ArrayList;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Threads {
     public static int noOfClients = 2;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void startClient() throws InterruptedException {
         ArrayList<Client> threads = new ArrayList<>();
         for (int i = 0; i<noOfClients; ++i) {
             Client client = new Client();
@@ -28,11 +28,11 @@ public class Threads {
 
     }
     private static void createLogFile(String fileName) {
-        try (FileWriter fileWriter = new FileWriter(fileName, true)) {
-        // No need to write anything here; the file will be appended if it exists
+        try {
+            FileWriter fileWriter = new FileWriter(fileName, true);
+            fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
-        // Handle file creation failure appropriately
         }
     }
 }

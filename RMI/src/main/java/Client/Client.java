@@ -1,4 +1,4 @@
-package org.example;
+package Client;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -6,10 +6,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
-import java.util.Objects;
 
-import static org.example.BatchRequestGenerator.getBatch;
-
+import static Client.BatchRequestGenerator.getBatch;
+import Server.IRemoteMethod;
 public class Client extends Thread implements Runnable {
     private static String logFileName;
 
@@ -26,9 +25,9 @@ public class Client extends Thread implements Runnable {
 
         ArrayList<String> batch = getBatch(writePercentage, batchSize, graphSize);
         System.out.println("batch generated is:  \n" + batch);
-        if(Objects.equals(reg.serverReady(), "R")){
+        if(reg.serverReady()){
             long startTime = System.currentTimeMillis();
-            ArrayList<String> response = reg.processBatch(batch, "BFS"); //reg.executeBatch(batch); //
+            ArrayList<String> response = reg.processBatch(batch, "notBFS");
             long endTime = System.currentTimeMillis();
 
             long responseTime = endTime - startTime;
