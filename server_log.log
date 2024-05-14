@@ -1,0 +1,72 @@
+Server started a batch_2
+Shortest path between 5 and 5 using notBFS is: -1
+Shortest path between 4 and 4 using notBFS is: 0
+Shortest path between 2 and 2 using notBFS is: 0
+Edge removed from 1 to 4
+
+Execution Time: 7 ms
+Server finished a batch_2
+------------------------------------------
+Server started a batch_2
+Shortest path between 5 and 4 using notBFS is: -1
+Edge removed from 3 to 4
+Edge added from 3 to 5
+Edge removed from 2 to 2
+
+Execution Time: 1 ms
+Server finished a batch_2
+------------------------------------------
+Server started a batch_2
+Shortest path between 1 and 1 using notBFS is: 0
+Edge removed from 5 to 4
+Edge removed from 1 to 3
+Shortest path between 1 and 2 using notBFS is: 1
+
+Execution Time: 1 ms
+Server finished a batch_2
+------------------------------------------
+Server started a batch_2
+Shortest path between 2 and 1 using notBFS is: 2
+Edge added from 4 to 1
+Edge removed from 1 to 2
+Shortest path between 1 and 4 using notBFS is: -1
+
+Execution Time: 0 ms
+Server finished a batch_2
+------------------------------------------
+Server started a batch_2
+Edge added from 5 to 2
+Edge removed from 2 to 5
+Shortest path between 4 and 3 using notBFS is: -1
+Edge removed from 2 to 5
+
+Execution Time: 0 ms
+Server finished a batch_2
+------------------------------------------
+Server started a batch_2
+Shortest path between 3 and 2 using notBFS is: 2
+Shortest path between 2 and 3 using notBFS is: 1
+Edge added from 1 to 3
+Edge added from 2 to 5
+
+Execution Time: 1 ms
+Server finished a batch_2
+------------------------------------------
+Server started a batch_2
+Shortest path between 1 and 2 using notBFS is: 3
+Shortest path between 3 and 5 using notBFS is: 1
+Shortest path between 5 and 5 using notBFS is: 0
+Edge removed from 4 to 3
+
+Execution Time: 0 ms
+Server finished a batch_2
+------------------------------------------
+Server started a batch_2
+Shortest path between 5 and 4 using notBFS is: 2
+Edge added from 3 to 2
+Edge added from 3 to 2
+Shortest path between 2 and 1 using notBFS is: 2
+
+Execution Time: 0 ms
+Server finished a batch_2
+------------------------------------------
