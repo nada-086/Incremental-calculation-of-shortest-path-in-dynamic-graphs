@@ -16,7 +16,7 @@ public class Client extends Thread implements Runnable {
         this.logFileName = logFileName;
     }
 
-    public static void startClientProcess() throws RemoteException, NotBoundException {
+    public static void startClientProcess() throws IOException, NotBoundException {
         int graphSize = 6;
         int writePercentage =  50;
         int batchSize = 4;
@@ -72,6 +72,8 @@ private static void logToFile(String fileName, ArrayList<String> batch, ArrayLis
         try {
             startClientProcess();
         } catch (RemoteException | NotBoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
