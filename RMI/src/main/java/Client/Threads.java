@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Threads {
-    public static int noOfClients = 2;
+    public static int noOfClients = 1;
 
     public static void startClient() throws InterruptedException {
         ArrayList<Client> threads = new ArrayList<>();
-        for (int i = 0; i<noOfClients; ++i) {
+        for (int i = 0; i < noOfClients; ++i) {
             Client client = new Client();
             
             // Create log file for each client

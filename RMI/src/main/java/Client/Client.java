@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static Client.BatchRequestGenerator.getBatch;
 import Server.IRemoteMethod;
@@ -36,7 +37,6 @@ public class Client extends Thread implements Runnable {
 
             logToFile(logFileName, batch, response, responseTime);
         }
-
     }
      public static void performanceWritePercentage() throws IOException, NotBoundException {
         int graphSize = 6;
@@ -68,6 +68,32 @@ public class Client extends Thread implements Runnable {
                     + " and 10 readings equals: " + (median[noOfReadings/2]) + "ms");
 
         }
+    }
+
+    public static void ResponseTimeNodes() throws IOException, NotBoundException {
+        int graphSize = 10;
+        int batchSize = 10;
+        Registry registry = LocateRegistry.getRegistry("127.0.1.1",1099);
+        IRemoteMethod reg = (IRemoteMethod) registry.lookup("RemoteMethod");
+        int noOfReadings = 5;
+        int writePercentage = 50;
+        long sum = 0;
+        for (int j = 0; j < noOfReadings; j++) {
+            ArrayList<String> batch = getBatch(writePercentage, batchSize, graphSize);
+            System.out.println("batch generated is:  \n" + batch);
+            System.out.println(reg.serverReady());
+            if (reg.serverReady()) {
+                System.out.println("Entered");
+                long startTime = System.nanoTime();
+                ArrayList<String> response = reg.processBatch(batch, "BFS");
+                System.out.println("Size of Response: " + response.size());
+                long endTime = System.nanoTime();
+                long responseTime = endTime - startTime;
+                System.out.println("response time : "+ responseTime);
+                sum += responseTime;
+            }
+        }
+        System.out.println("Average Response = " + (sum / 5) + " ns");
     }
     
 private static void logToFile(String fileName, ArrayList<String> batch, ArrayList<String> responses, long responseTime) {
@@ -102,7 +128,7 @@ private static void logToFile(String fileName, ArrayList<String> batch, ArrayLis
     public void run() {
         try {
            //            startClientProcess();
-            performanceWritePercentage();
+            ResponseTimeNodes();
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -113,5 +139,4 @@ private static void logToFile(String fileName, ArrayList<String> batch, ArrayLis
 //        public static void main(String[] args) throws NotBoundException, RemoteException {
 //             startClientProcess();
 //        }
-
 }

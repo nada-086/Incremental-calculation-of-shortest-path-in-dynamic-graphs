@@ -16,20 +16,18 @@ public class Main {
             Threads.startClient();
             Thread.sleep(10000);
         }
-
-
     }
     private static void deleteLogFiles() {
     // Delete log files
-    for (int i = 0; i < Threads.noOfClients; i++) {
-        String logFileName = "log" + i + ".txt";
-        File logFile = new File(logFileName);
-        if (logFile.exists()) {
-            logFile.delete();
-            System.out.println("Deleted log file: " + logFileName);
-        } else {
-            System.out.println("Log file does not exist: " + logFileName);
+        for (int i = 0; i < Threads.noOfClients; i++) {
+            String logFileName = "log" + i + ".txt";
+            File logFile = new File(logFileName);
+            if (logFile.exists()) {
+                logFile.delete();
+                System.out.println("Deleted log file: " + logFileName);
+            } else {
+                System.out.println("Log file does not exist: " + logFileName);
+            }
         }
-    }
     }
 }

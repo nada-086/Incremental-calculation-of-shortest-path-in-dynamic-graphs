@@ -2,6 +2,7 @@ package Server;
 
 import java.io.Serial;
 import java.io.IOException;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -15,6 +16,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
 
 public class Server extends UnicastRemoteObject implements IRemoteMethod {
     @Serial
